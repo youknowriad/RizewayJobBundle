@@ -1,0 +1,22 @@
+{
+    "name": "rizeway/job-bundle",
+    "type": "symfony-bundle",
+    "description": "A Simple Job Bundle for Symfony 2",
+    "keywords": [],
+    "homepage": "http://rizeway.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Riad Benguella",
+            "email": "riad@rizeway.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Rizeway\\JobBundle": "" }
+    },
+    "target-dir": "Rizeway/JobBundle",
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "minimum-stability": "dev",
+}
