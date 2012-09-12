@@ -48,57 +48,56 @@ A job is a class that implements Rizeway/JobBundle/JobHandler/JobHandlerInterfac
 
 Example:
 
-    ```php
-    <?php
+```php
+<?php
 
-    namespace MyBundle\JobHandler;
+namespace MyBundle\JobHandler;
 
-    use Rizeway\JobBundle\JobHandler\ContainerAwareJobHandler;
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Rizeway\JobBundle\JobHandler\ContainerAwareJobHandler;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-    class MyJobHandler extends ContainerAwareJobHandler
+class MyJobHandler extends ContainerAwareJobHandler
+{
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        protected function setDefaultOptions(OptionsResolverInterface $resolver)
-        {
-            $resolver->setRequired(array(
-                'my_required_option',
-            ));
-        }
+        $resolver->setRequired(array(
+            'my_required_option',
+        ));
+    }
 
-        public function run()
-        {
-            $this->log('My Option Is : '.$this->getOption('my_required_option'));
-            ....
-        }
-    ```
+    public function run()
+    {
+        $this->log('My Option Is : '.$this->getOption('my_required_option'));
+        ....
+    }
+```
 
 3. Scheduling a job 
 
 Scheduling a job is done like this
 
+```php
+<?php
 
-    ```php
-    <?php
+namespace MyBundle\Controller;
 
-    namespace MyBundle\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rizeway\JobBundle\Entity\Job;
 
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    use Rizeway\JobBundle\Entity\Job;
-    
-    class myController extends Controller
+class myController extends Controller
+{
+    public function myAction()
     {
-        public function myAction()
-        {
-            $job = new Job();
-            $job->setName('Job Name');
-            $job->setType('Job Type');
-            $job->setClassname('\MyBundle\JobHandler\MyJobHandler');
-            $job->setOptions(array(
-                'my_required_option'   => 'option_value'
-            ));
+        $job = new Job();
+        $job->setName('Job Name');
+        $job->setType('Job Type');
+        $job->setClassname('\MyBundle\JobHandler\MyJobHandler');
+        $job->setOptions(array(
+            'my_required_option'   => 'option_value'
+        ));
 
-            $this->getDoctrine()->getEntityManager()->persist($job);
-            $this->getDoctrine()->getEntityManager()->flush();
-            ....
-        }
-    ```
+        $this->getDoctrine()->getEntityManager()->persist($job);
+        $this->getDoctrine()->getEntityManager()->flush();
+        ....
+    }
+```
