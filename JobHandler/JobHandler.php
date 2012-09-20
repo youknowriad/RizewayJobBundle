@@ -19,8 +19,14 @@ abstract class JobHandler implements JobHandlerInterface
         $this->options = $resolver->resolve($options);
     }
 
-    public function setLogger(LoggerInterface $logger) {
+    public function setLogger(LoggerInterface $logger = null)
+    {
         $this->logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     protected function log($message, $priority = LoggerInterface::PRIORITY_INFO)
