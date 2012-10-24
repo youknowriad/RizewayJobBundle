@@ -1,7 +1,7 @@
 parameters:
-#    rizeway_job.example.class: Rizeway\JobBundle\Example
+    rizeway_job.logger.class: Rizeway\JobBundle\Logger\DoctrineLogger
 
 services:
-#    rizeway_job.example:
-#        class: %rizeway_job.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    rizeway_job.logger:
+        class: %rizeway_job.logger.class%
+        arguments: [@doctrine.orm.entity_manager]

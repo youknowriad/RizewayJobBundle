@@ -6,14 +6,13 @@ use Rizeway\JobBundle\Entity\JobLog;
 use Rizeway\JobBundle\Entity\Job;
 use Doctrine\ORM\EntityManager;
 
-class DoctrineLogger implements LoggerInterface
+class DoctrineLogger implements JobLoggerInterface
 {
     protected $job;
     protected $em;
 
-    public function __construct(Job $job, EntityManager $em)
+    public function __construct(EntityManager $em)
     {
-        $this->job = $job;
         $this->em = $em;
     }
 
@@ -26,5 +25,13 @@ class DoctrineLogger implements LoggerInterface
 
         $this->em->persist($log);
         $this->em->flush();
+    }
+
+    /**
+     * @param \Rizeway\JobBundle\Entity\Job $job
+     */
+    public function setJob(Job $job)
+    {
+        $this->job = $job;
     }
 }

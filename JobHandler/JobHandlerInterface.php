@@ -2,11 +2,11 @@
 
 namespace Rizeway\JobBundle\JobHandler;
 
-use Rizeway\JobBundle\Logger\LoggerInterface;
+use Rizeway\JobBundle\Logger\JobLoggerInterface;
 
 interface JobHandlerInterface
 {
     public function setOptions(array $options);
-    public function setLogger(LoggerInterface $logger);
+    public function setLogger(JobLoggerInterface $logger = null);
     public function run();
 }
