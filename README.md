@@ -101,3 +101,18 @@ class myController extends Controller
         ....
     }
 ```
+
+Advanced Usage
+--------------
+
+1. Logger
+
+The DoctrineLogger instance is available through a service.
+If you want to create your own Logger class and use it in the DaemonCommand, just create a new class which implements the JobLoggerInterface and declare it as a service.
+
+Below is an example:
+
+```yml
+parameters:
+    rizeway_job.logger.class: Acme\AcmeBundle\Logger\AcmeLogger
+```

@@ -3,7 +3,7 @@
 namespace Rizeway\JobBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rizeway\JobBundle\Logger\LoggerInterface;
+use Rizeway\JobBundle\Logger\JobLoggerInterface;
 
 /**
  * Rizeway\JobBundle\Entity\JobLog
@@ -11,9 +11,9 @@ use Rizeway\JobBundle\Logger\LoggerInterface;
 class JobLog
 {
     public static $priority_labels = array(
-        LoggerInterface::PRIORITY_INFO => 'info',
-        LoggerInterface::PRIORITY_WARNING => 'warning',
-        LoggerInterface::PRIORITY_ERROR => 'error',
+        JobLoggerInterface::PRIORITY_INFO => 'info',
+        JobLoggerInterface::PRIORITY_WARNING => 'warning',
+        JobLoggerInterface::PRIORITY_ERROR => 'error',
     );
 
     /**
