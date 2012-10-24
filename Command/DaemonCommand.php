@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Rizeway\JobBundle\Entity\Job;
 use Rizeway\JobBundle\Logger\DoctrineLogger;
-use Rizeway\JobBundle\Logger\LoggerInterface;
+use Rizeway\JobBundle\Logger\JobLoggerInterface;
 
 declare(ticks = 1);
 
@@ -15,6 +15,7 @@ class DaemonCommand extends ContainerAwareCommand
 {
     protected $running = false;
     protected $job;
+    /** @var JobLoggerInterface $logger */
     protected $logger;
 
     protected function configure()
@@ -29,9 +30,10 @@ class DaemonCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $job = $em->getRepository('RizewayJobBundle:Job')->findOneBy(array('status' => Job::STATUS_NEW), array('created_at' => 'ASC'));
         if (is_null($job)) {
-            $output->writeln('No jobs in queue');  
+            $output->writeln('No jobs in queue');
         } else {
-            $this->logger = $logger = new DoctrineLogger($job, $em);
+            $this->logger = $this->getContainer()->get('rizeway_job.logger');
+            $this->logger->setJob($job);
             $this->job = $job;
 
             pcntl_signal(SIGTERM, array($this, 'checkExit'));
@@ -54,7 +56,7 @@ class DaemonCommand extends ContainerAwareCommand
                     $job_object->setContainer($this->getContainer());
                 }
                 $job_object->setOptions($job->getOptions());
-                $job_object->setLogger($logger);
+                $job_object->setLogger($this->logger);
                 $job_object->run();
 
                 $job->setStatus(Job::STATUS_SUCCESS);
@@ -64,7 +66,7 @@ class DaemonCommand extends ContainerAwareCommand
                     $job->getName(),
                     $e->getMessage()));
 
-                $logger->log($e->getMessage(), LoggerInterface::PRIORITY_ERROR);
+                $this->logger->log($e->getMessage(), JobLoggerInterface::PRIORITY_ERROR);
 
                 $job->setStatus(Job::STATUS_ERROR);
                 $em->flush();
@@ -80,7 +82,7 @@ class DaemonCommand extends ContainerAwareCommand
         {
             $em = $this->getContainer()->get('doctrine')->getEntityManager();
             if (!is_null($this->logger)) {
-                $this->logger->log('The job has been forced to stop', LoggerInterface::PRIORITY_ERROR);
+                $this->logger->log('The job has been forced to stop', JobLoggerInterface::PRIORITY_ERROR);
             }
             $this->job->setStatus(Job::STATUS_ERROR);
             $em->flush();

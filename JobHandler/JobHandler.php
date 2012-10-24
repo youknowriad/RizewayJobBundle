@@ -4,7 +4,7 @@ namespace Rizeway\JobBundle\JobHandler;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Rizeway\JobBundle\Logger\LoggerInterface;
+use Rizeway\JobBundle\Logger\JobLoggerInterface;
 
 abstract class JobHandler implements JobHandlerInterface
 {
@@ -19,7 +19,7 @@ abstract class JobHandler implements JobHandlerInterface
         $this->options = $resolver->resolve($options);
     }
 
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(JobLoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }
@@ -29,7 +29,7 @@ abstract class JobHandler implements JobHandlerInterface
         return $this->logger;
     }
 
-    protected function log($message, $priority = LoggerInterface::PRIORITY_INFO)
+    protected function log($message, $priority = JobLoggerInterface::PRIORITY_INFO)
     {
         if (!is_null($this->logger)) {
             $this->logger->log($message, $priority);
